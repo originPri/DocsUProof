@@ -51,5 +51,5 @@
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/<your-username>/DocuProof.git
+git clone https://github.com/<your-username>/DocsUProof.git
 cd DocuProof
