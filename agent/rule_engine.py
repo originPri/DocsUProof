@@ -219,3 +219,145 @@ def assess_clause_legality_hybrid(clause: Dict[str, Any], state_rules: Dict[str,
             illegal = True
             reasons.append(f"Rent increases cannot occur more frequently than every {max_freq} months (clause mentions {nums['months']} months)")
             score -= 30
+
+    # Entry / inspections 
+    if ctype == "entry" or "entry" in safe_lower(text):
+        entry_rules = state_rules.get("entry_notice_days", {})
+        # We look for days in text
+        if "days" in nums:
+            # routine_inspection might be in hours or days; use a simple heuristic
+            allowed = entry_rules.get("routine_inspection")
+            if allowed and nums["days"] < allowed:
+                reasons.append(f"Entry notice of {nums['days']} days is shorter than {state_code} allowed routine inspection notice ({allowed})")
+                score -= 10
+
+
+    # Fairness heuristics
+
+    # Pattern-based flags
+    for pattern, reason_text, severity in FAIRNESS_PATTERNS:
+        if pattern.search(text):
+            reasons.append(f"Potentially unfair: {reason_text}")
+            score -= severity * 2
+
+    # Numeric fairness heuristics (penalties)
+    if ctype == "penalty":
+        if "weeks" in nums and nums["weeks"] > FAIRNESS_THRESHOLDS["penalty_weeks_upper_bound"]:
+            reasons.append(f"Penalty of {nums['weeks']} weeks is likely excessive")
+            score -= 20
+
+    # If clause contains absolute absolutes
+    if re.search(r"\b(no refund|no liability|at any time|without notice)\b", text, re.I):
+        reasons.append("Clause uses absolute language that often indicates unfair or illegal terms")
+        score -= 15
+
+    
+    # LLM reasoning: use for nuanced textual legal interpretation
+    
+    llm_explanation = None
+    if LLM_AVAILABLE:
+        llm_out = call_llm_for_clause(clause, state_code)
+        if llm_out:
+            # If LLM returns explicit verdict, integrate it
+            llm_explanation = llm_out
+            v = safe_lower(llm_out.get("verdict", ""))
+            if "illegal" in v:
+                illegal = True
+                reasons.append("LLM flagged as illegal: " + llm_out.get("explanation", ""))
+                score -= 30
+            elif "potentially unfair" in v or "unfair" in v:
+                reasons.append("LLM flagged as potentially unfair: " + llm_out.get("explanation", ""))
+                score -= 20
+            elif "needs manual" in v or "manual" in v:
+                reasons.append("LLM recommends manual review: " + llm_out.get("explanation", ""))
+                score -= 10
+
+    # Final adjustments
+    score = max(0.0, min(100.0, score))
+
+    # Decide final verdict
+    if illegal:
+        verdict = "Illegal"
+    else:
+        # if many reasons or low score, mark potentially unfair
+        if score < 60 or any("Potentially unfair" in r for r in reasons):
+            verdict = "Potentially Unfair"
+        elif score < 80 and reasons:
+            verdict = "Needs Manual Review"
+        else:
+            verdict = "Legal"
+
+    return {
+        "verdict": verdict,
+        "score": round(score, 1),
+        "illegal": illegal,
+        "reasons": reasons,
+        "llm_explanation": llm_explanation,
+        "clause": clause,
+    }
+
+
+
+# Contract-level evaluation
+
+
+def evaluate_contract(clauses: List[Dict[str, Any]], state: str = "NSW") -> Dict[str, Any]:
+    """Evaluate a list of clauses and return an overall report."""
+    state_rules = STATE_RULES.get(state.upper(), {})
+    results = [assess_clause_legality_hybrid(c, state_rules, state.upper()) for c in clauses]
+
+    # Simple aggregation
+    scores = [r["score"] for r in results]
+    avg_score = sum(scores) / len(scores) if scores else 100
+
+    illegal_count = sum(1 for r in results if r["illegal"]) 
+    potentially_unfair = sum(1 for r in results if r["verdict"] == "Potentially Unfair")
+
+    overall_verdict = "Legal"
+    if illegal_count > 0:
+        overall_verdict = "Contains Illegal Clauses"
+    elif potentially_unfair > 0 or avg_score < 70:
+        overall_verdict = "Potentially Unfair — Review Recommended"
+
+    return {
+        "state": state,
+        "overall_verdict": overall_verdict,
+        "average_score": round(avg_score, 1),
+        "illegal_count": illegal_count,
+        "clauses_evaluated": len(results),
+        "results": results,
+    }
+
+
+
+# Example usage (SAMPLE_CLAUSES)
+
+SAMPLE_CLAUSES = [
+    {
+        "type": "bond",
+        "text": "Tenant must pay bond of 6 weeks' rent.",
+        "numeric_values": {"weeks": 6},
+        "weekly_rent": 500.0,
+    },
+    {
+        "type": "rent_increase",
+        "text": "Landlord may increase rent every 6 months with 30 days' notice.",
+        "numeric_values": {"months": 6, "days": 30},
+    },
+    {
+        "type": "penalty",
+        "text": "If tenant breaks lease, tenant pays 8 weeks of rent as penalty.",
+        "numeric_values": {"weeks": 8},
+    },
+    {
+        "type": "entry",
+        "text": "Landlord may enter the property for inspections at any time without notice.",
+    }
+]
+
+
+
+if __name__ == "__main__":
+    report = evaluate_contract(SAMPLE_CLAUSES, state="NSW")
+    print(json.dumps(report, indent=2))
+
