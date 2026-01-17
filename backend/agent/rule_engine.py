@@ -360,4 +360,3 @@ SAMPLE_CLAUSES = [
 if __name__ == "__main__":
     report = evaluate_contract(SAMPLE_CLAUSES, state="NSW")
     print(json.dumps(report, indent=2))
-
