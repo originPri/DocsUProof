@@ -92,4 +92,19 @@ Install, log in, and start Docker.
 ```bash
 git clone DocsUProof.git
 cd DocsUProof
+```
+
+#### Step 3: Start Backend Services
+
+```bash
+cd backend
+docker compose up --build
+```
+
+This will start the following services:
+
+- **PostgreSQL database**
+- **Backend API**
+- **AI processing services**
+
 
