@@ -45,7 +45,12 @@ Jurisdiction parsing accuracy evaluates whether the system correctly identifies 
 | UT_006 | Input Validator | Empty upload handling | Empty file | Error message | Error displayed | PASS |
 
 ## 1.5 Example Unit Test Code
-*(Included separately in implementation section)*
+<img width="908" height="133" alt="image" src="https://github.com/user-attachments/assets/cc6af3fb-1a62-4fd8-b0ae-2d875de75c31" />
+<img width="775" height="167" alt="image" src="https://github.com/user-attachments/assets/04d74cd1-5bcd-4d6b-8e31-c6c6dc08b073" />
+<img width="775" height="138" alt="image" src="https://github.com/user-attachments/assets/37139854-40c4-4d91-846c-3d7a59cbe39f" />
+
+
+
 
 ## 1.6 Unit Testing Results
 All unit tests were executed successfully with no critical failures observed. Backend modules exhibited consistent behaviour across all tested scenarios. Edge cases were handled effectively, and the system did not crash when invalid inputs were provided.
