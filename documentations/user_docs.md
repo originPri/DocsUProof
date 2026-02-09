@@ -90,7 +90,8 @@ Install, log in, and start Docker.
 
 #### Step 2: Clone the Repository
 ```bash
-git clone DocsUProof.git
+git clone https://github.com/originPri/DocsUProof.git
+
 cd DocsUProof
 ```
 
