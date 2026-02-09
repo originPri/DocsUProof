@@ -74,6 +74,8 @@ The PostgreSQL integration test validated database startup, connection stability
 Log outputs confirmed successful database initialization and availability for connections. The backend connected reliably and performed transactional operations without failure, ensuring data integrity.
 
 This test confirmed that the database integration was successful and provided a stable storage layer for the application.
+<img width="940" height="121" alt="image" src="https://github.com/user-attachments/assets/a4009568-1a9f-490e-87c7-47937434888b" />
+
 
 ## 2.2 Rental_Frontend Testing
 Frontend integration testing verified the build and runtime behaviour of the React-based user interface. The application compiled successfully via Webpack, and the development server started without errors.
@@ -81,6 +83,8 @@ Frontend integration testing verified the build and runtime behaviour of the Rea
 The frontend was accessible via a local browser and properly connected to the backend API. Core user interactions—including document upload, query submission, and response display—were tested and confirmed to function correctly.
 
 Minor deprecation warnings were observed but did not affect runtime performance or user experience.
+<img width="940" height="241" alt="image" src="https://github.com/user-attachments/assets/ca0d6b5d-b347-4cf6-94ee-f4b0d96c60b9" />
+
 
 ## 2.3 Rental_Backend Testing
 Backend integration testing assessed server startup, database connectivity, and API readiness. The FastAPI server was launched successfully using Uvicorn and connected to PostgreSQL without issues.
@@ -88,11 +92,16 @@ Backend integration testing assessed server startup, database connectivity, and 
 Database migrations completed successfully, and the backend handled requests related to document processing, clause analysis, and AI-generated responses. Non-critical telemetry warnings did not affect system functionality.
 
 This confirmed that the backend acts as a stable and reliable processing layer.
+<img width="940" height="144" alt="image" src="https://github.com/user-attachments/assets/838f8526-716d-4a99-869f-bf569e0e54dd" />
+
+
 
 ## 2.4 End-to-End Chat Processing Testing
 This test validated the full AI chat workflow from frontend input to backend processing and response generation. User queries submitted through the frontend were correctly processed by the backend, which retrieved relevant legal content from the vector database and generated comprehensible responses.
 
 System logs confirmed successful user identification, document retrieval, AI processing, and HTTP responses. This demonstrated seamless interaction between all components and verified that the Retrieval-Augmented Generation (RAG) pipeline works correctly in a real-world environment.
+<img width="940" height="300" alt="image" src="https://github.com/user-attachments/assets/fe473124-2d69-421c-81de-ef1b0f612029" />
+
 
 ## 2.5 Document Upload and Database Testing
 This integration test verified the document ingestion pipeline. Uploaded rental agreements were successfully processed, stored, and validated within the database.
@@ -100,6 +109,8 @@ This integration test verified the document ingestion pipeline. Uploaded rental 
 Logs confirmed successful text extraction, jurisdiction detection, database record creation, commit operations, and post-save verification. Retrieved documents retained full content integrity.
 
 This demonstrated reliable handling of large legal documents and confirmed successful integration between upload interface, backend processing, and PostgreSQL storage.
+<img width="940" height="723" alt="image" src="https://github.com/user-attachments/assets/3d422a83-c8f0-407a-9bbd-2c301b5074ce" />
+
 
 ---
 
