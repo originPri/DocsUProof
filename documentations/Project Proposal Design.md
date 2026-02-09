@@ -144,10 +144,13 @@ Milestones and deliverables may be adjusted with agreement from all group member
 10. Documentation and final submission  
 
 ### WBS
-*(Provided separately)*
+<img width="975" height="633" alt="image" src="https://github.com/user-attachments/assets/e84476db-1646-452f-86c0-9e18fb9f63ee" />
+
 
 ### PERT Chart
-*(Provided separately)*
+
+<img width="850" height="385" alt="image" src="https://github.com/user-attachments/assets/4325f94c-1d60-477a-8617-5e95ab06b2f9" />
+
 
 ---
 
