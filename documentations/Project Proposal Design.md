@@ -132,6 +132,8 @@ Milestones and deliverables may be adjusted with agreement from all group member
 ## Project Schedule
 
 ### Gantt Chart (High-Level Tasks)
+<img width="1204" height="1006" alt="image" src="https://github.com/user-attachments/assets/b57c34c5-9626-4038-adde-58df3aa196fe" />
+
 1. Project initiation and planning  
 2. Legal data collection (all states)  
 3. Data cleaning and PDF text extraction  
